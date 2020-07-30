@@ -12,7 +12,8 @@ function Footer() {
         {' '}
         <a href="https://www.alura.com.br/">
           Imersão React da Alura
-        </a>
+        </a>. <br />
+        <a href="https://github.com/prscreis" target="_blank" rel="noreferrer noopener">GitHub</a>
       </p>
     </FooterBase>
   );
