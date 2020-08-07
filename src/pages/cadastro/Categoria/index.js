@@ -3,22 +3,18 @@ import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
+import useForm from '../../../hooks/useForm';
 
 const CadastroCategoria = () => {
   const valoresIniciais = {
-    nome: '',
+    titulo: '',
     descricao: '',
     cor: '',
   };
 
+  const { values, handleChange, clearForm } = useForm(valoresIniciais);
+
   const [categorias, setCategorias] = useState([]);
-  const [values, setValues] = useState(valoresIniciais);
-
-  console.log('Categorias: ', categorias);
-
-  const setValue = (chave, valor) => {
-    setValues({ ...values, [chave]: valor });
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -28,53 +24,31 @@ const CadastroCategoria = () => {
       values,
     ]);
 
-    setValues(valoresIniciais);
-  };
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValue(name, value);
+    clearForm();
   };
 
   useEffect(() => {
-    const URL = 'http://localhost:8080/categorias';
+    const URL = window.location.hostname.includes('localhost') ? 'http://localhost:8080/categorias' : 'https://paulo-flix.herokuapp.com/categorias';
 
     fetch(URL).then(async (response) => {
       const resposta = await response.json();
       setCategorias([...resposta]);
     });
-
-    // setTimeout(() => {
-    //   setCategorias([
-    //     ...categorias,
-    //     {
-    //       id: 1,
-    //       nome: 'Front end',
-    //       descricao: 'Uma categoria bacanudassa',
-    //       cor: '#cbd1ff',
-    //     },
-    //     {
-    //       id: 2,
-    //       nome: 'Back end',
-    //       descricao: 'Outra categoria bacanudassa',
-    //       cor: '#cbd1ff',
-    //     }]);
-    // }, 4 * 1000);
   }, []);
 
   return (
     <PageDefault>
       <h1>
         Cadastro de categoria:
-        {values.nome}
+        {values.titulo}
       </h1>
 
       <form onSubmit={handleSubmit}>
         <FormField
-          label="Nome da categoria"
+          label="Título da categoria"
           type="text"
-          name="nome"
-          value={values.nome}
+          name="titulo"
+          value={values.titulo}
           onChange={handleChange}
         />
 
@@ -101,8 +75,8 @@ const CadastroCategoria = () => {
 
       <ul>
         {categorias.map((categoria) => (
-          <li key={`${categoria.nome}`}>
-            {categoria.nome}
+          <li key={`${categoria.titulo}`}>
+            {categoria.titulo}
           </li>
         ))}
       </ul>
